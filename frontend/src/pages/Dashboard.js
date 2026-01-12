@@ -8,8 +8,10 @@ import axios from 'axios';
 function Dashboard() {
   const [output, setOutput] = useState('');
   const [model, setModel] = useState('openai');
+  const [loading, setLoading] = useState(false);
 
   const handleProcess = async (prompt) => {
+    setLoading(true);
     try {
       const response = await axios.post('http://localhost:8000/api/ai/process', {
         prompt,
@@ -17,7 +19,9 @@ function Dashboard() {
       });
       setOutput(response.data.result);
     } catch (error) {
-      setOutput('Error processing request');
+      setOutput('Error processing request: ' + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -29,17 +33,25 @@ function Dashboard() {
       });
       alert(`Exported to ${response.data.file_path}`);
     } catch (error) {
-      alert('Error exporting');
+      alert('Error exporting: ' + error.message);
     }
   };
 
   return (
-    <div>
-      <h1>DocBrain AI Dashboard</h1>
-      <ModelSelector selectedModel={model} onModelChange={setModel} />
-      <PromptBox onSubmit={handleProcess} />
-      <OutputBox output={output} />
-      <ExportButtons onExport={handleExport} />
+    <div className="dashboard">
+      <h1>🧠 DocBrain AI Dashboard</h1>
+      <div className="card">
+        <ModelSelector selectedModel={model} onModelChange={setModel} />
+      </div>
+      <div className="card">
+        <PromptBox onSubmit={handleProcess} loading={loading} />
+      </div>
+      <div className="card">
+        <OutputBox output={output} loading={loading} />
+      </div>
+      <div className="card">
+        <ExportButtons onExport={handleExport} />
+      </div>
     </div>
   );
 }

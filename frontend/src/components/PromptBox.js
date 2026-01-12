@@ -1,25 +1,32 @@
 import React, { useState } from 'react';
 
-function PromptBox({ onSubmit }) {
+function PromptBox({ onSubmit, loading }) {
   const [prompt, setPrompt] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(prompt);
+    if (prompt.trim()) {
+      onSubmit(prompt);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <textarea
-        value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
-        placeholder="Enter your prompt here..."
-        rows="4"
-        cols="50"
-      />
-      <br />
-      <button type="submit">Process</button>
-    </form>
+    <div style={{ textAlign: 'left' }}>
+      <h3>💬 Enter Your Prompt</h3>
+      <form onSubmit={handleSubmit}>
+        <textarea
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          placeholder="Describe what you want to process with AI..."
+          rows="6"
+          required
+        />
+        <br />
+        <button type="submit" disabled={loading}>
+          {loading ? <span className="loading"></span> : '🚀 Process'}
+        </button>
+      </form>
+    </div>
   );
 }
 
