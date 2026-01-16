@@ -11,19 +11,27 @@ function PromptBox({ onSubmit, loading }) {
   };
 
   return (
-    <div style={{ textAlign: 'left' }}>
-      <h3>💬 Enter Your Prompt</h3>
+    <div>
+      <h3>Input Prompt</h3>
       <form onSubmit={handleSubmit}>
-        <textarea
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          placeholder="Describe what you want to process with AI..."
-          rows="6"
-          required
-        />
-        <br />
+        <div className="form-group">
+          <textarea
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder="Enter your document processing prompt here..."
+            rows="6"
+            required
+          />
+        </div>
         <button type="submit" disabled={loading}>
-          {loading ? <span className="loading"></span> : '🚀 Process'}
+          {loading ? (
+            <>
+              <span className="loading"></span>
+              Processing...
+            </>
+          ) : (
+            'Process Document'
+          )}
         </button>
       </form>
     </div>

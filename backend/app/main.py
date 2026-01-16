@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import ai, export, history
+from app.routers import ai, export, history, auth
 
 app = FastAPI(title="DocBrain AI Backend", version="1.0.0")
 
@@ -14,6 +14,7 @@ app.add_middleware(
 )
 
 # Include routers
+app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(ai.router, prefix="/api/ai", tags=["AI"])
 app.include_router(export.router, prefix="/api/export", tags=["Export"])
 app.include_router(history.router, prefix="/api/history", tags=["History"])
